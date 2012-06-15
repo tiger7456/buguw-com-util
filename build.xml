@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project name="TransactionProxyObject" default="distribute" basedir=".">
+	<description>Builds the buguw-com-jasperreports component</description>
+
+	<property name="libdir" value="${basedir}/lib">
+	</property>
+	<property name="distlibdir" value="${basedir}/dist_lib">
+	</property>
+	<property name="classdir" value="${basedir}/dist_class">
+	</property>
+	<property name="srcbasedir" value="${basedir}/src">
+	</property>
+	<property name="testdir" value="${basedir}/src_test">
+	</property>
+	<!--property name="compile.encode" value="ISO8859_1"-->
+	<property name="compile.encode" value="UTF-8">
+	</property>
+	<property name="compile.target" value="1.6">
+	</property>
+
+
+	<target name="init" description="init before distribute all">
+		<mkdir dir="${classdir}" />
+		<mkdir dir="${distlibdir}" />
+	</target>
+
+
+	<target name="distribute" depends="compile">
+		<jar destfile="${distlibdir}/buguw-com-util.jar">
+			<fileset dir="${classdir}">
+				<include name="**/*.class" />
+				<include name="**/*.properties" />
+				<exclude name="**/*Test.class" />
+			</fileset>
+		</jar>
+		<!-- TODO war-->
+	</target>
+
+
+	<target name="compile" depends="init">
+		<javac srcdir="${srcbasedir}" excludes="**/*Test.java" destdir="${classdir}" fork="true" memoryMaximumSize="256m" encoding="${compile.encode}">
+			<classpath>
+				<fileset dir="${libdir}">
+					<include name="*.jar" />
+				</fileset>
+			</classpath>
+		</javac>
+		<copy todir="${classdir}">
+			<fileset dir="${srcbasedir}">
+				<include name="**/*.properties" />
+			</fileset>
+		</copy>
+	</target>
+	<target name="clean" description="删除">
+
+		<echo message="删除目录" />
+
+		<delete dir="${classdir}" />
+
+		<delete dir="${distlibdir}" />
+
+	</target>
+
+</project>
